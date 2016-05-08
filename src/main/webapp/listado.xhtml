@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/plantillas/plantilla.xhtml">
+
+            <ui:define name="content"> 
+                <h:outputScript>
+                    document.write(new Date());
+                </h:outputScript>
+                <h:form id="nuevo" >
+                    
+                <h:commandLink value="Nuevo" action="#{clienteController.crear()}"/>
+                    <h:message for="nuevo"/>
+                <h:panelGrid columns="4">
+                <h:outputText value="Nombre" rendered="#{clienteController.creando}"/>
+                <h:inputText value="#{clienteController.nuevo.nombre}" rendered="#{clienteController.creando}" />
+                <h:commandLink  value="Guardar" rendered="#{clienteController.creando}" action="#{clienteController.guardarNuevo()}"/>
+                <h:commandLink  value="Cancelar" rendered="#{clienteController.creando}" action="#{clienteController.cancelarNuevo()}"/>
+                </h:panelGrid>
+                </h:form>
+                <h:form id="elFormulario">
+                    <f:ajax execute="@form" render="@form">
+                    <h:message for="elFormulario"/>
+                <h:dataTable var="cli" value="#{clienteController.getListado()}">
+                    <h:column>
+                        <f:facet name="header">
+                            ID
+                            <h:commandLink action="#{clienteController.setOrdenacion('id',true)}" value="Asc" 
+                                           rendered="#{clienteController.orden!='id' or not clienteController.asc}"/>
+                            <h:commandLink action="#{clienteController.setOrdenacion('id',false)}" value="Desc" 
+                                           rendered="#{clienteController.orden!='id' or clienteController.asc}"/>
+                        </f:facet>
+                        
+                    #{cli.id} 
+                    <f:facet name="footer">
+                            ID
+                        </f:facet>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            NOMBRE
+                            <h:commandLink action="#{clienteController.setOrdenacion('nombre',true)}" value="Asc" 
+                                           rendered="#{clienteController.orden!='nombre' or not clienteController.asc}"/>
+                            <h:commandLink action="#{clienteController.setOrdenacion('nombre',false)}" value="Desc" 
+                                           rendered="#{clienteController.orden!='nombre' or clienteController.asc}"/>
+                        </f:facet>
+                        <h:outputText value="#{cli.nombre}" rendered="#{!(cli==clienteController.actual and clienteController.actual.enEdicion)}"/>
+                        <h:inputText id="nombre" value="#{clienteController.actual.nombre}" rendered="#{cli==clienteController.actual and clienteController.actual.enEdicion}">
+                            <f:validateRequired/>
+                        </h:inputText>
+                        
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            Acciones
+                        </f:facet>
+                        <h:commandLink action="#{clienteController.borrar(cli)}" value="Borrar"/>
+                        <h:commandLink action="#{clienteController.inicioEdicion(cli)}"  
+                                       rendered="#{cli!=clienteController.actual or (cli==clienteController.actual and !clienteController.actual.enEdicion)}" 
+                                       value="Editar"/>
+                        <h:commandLink action="#{clienteController.cancelarEdicion()}"
+                                       immediate="true"
+                                       rendered="#{cli==clienteController.actual and clienteController.actual.enEdicion}"
+                                       value="Cancelar"/>
+                        <h:commandLink action="#{clienteController.guardarEdicion()}" 
+                                       rendered="#{cli==clienteController.actual and clienteController.actual.enEdicion}"
+                                       value="Guardar"/>
+                        
+                    </h:column>
+                </h:dataTable>
+                    <ui:repeat value="#{clienteController.paginas}" var="actual">
+                        <h:commandLink value="#{actual}" action="#{clienteController.setPaginaActual(actual-1)}" />
+                    </ui:repeat>
+                    </f:ajax>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

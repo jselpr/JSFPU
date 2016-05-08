@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:lib="http://xmlns.jcp.org/jsf/composite/ejemplo"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/plantillas/plantilla.xhtml">
+
+            <ui:define name="content">
+                <lib:ejemplo nombre="Ana"/>
+                <lib:ejemplo/>
+                <lib:ejemplo dao="#{dao}"/>
+                <lib:ejemplo dao="#{dao}">
+                    El contenido ....#{dao}
+                </lib:ejemplo>
+                <lib:ejemplo dao="#{dao}">
+                    <h:outputText value="#{cliente.id}">
+                        <f:convertNumber minIntegerDigits="4"/>
+                    </h:outputText>
+                </lib:ejemplo>
+                
+                <lib:ejemplo dao="#{dao}">
+                    <h:column>
+                        #{cliente.id}---#{cliente.nombre}
+                    </h:column>
+                </lib:ejemplo>
+                <lib:ejemplo dao="#{dao}">
+                    <f:facet name="pie">
+                        El pie ....
+                    </f:facet>
+                    <h:column>
+                        #{cliente.id}---#{cliente.nombre}
+                    </h:column>
+                </lib:ejemplo>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

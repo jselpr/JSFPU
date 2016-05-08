@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./WEB-INF/plantillas/plantilla.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:outputText id="salida" style="color: blue" value="Texto"  binding="#{enlace.salida}"/>
+        <h:form>
+            <f:ajax execute="@form" render=":salida"> <!-- con versiones 2.1 se puede usar sin : -->
+            <h:commandButton  value="Cambia color" action="#{enlace.ejecutar()}"/>
+            </f:ajax>
+        </h:form>
+    </ui:define>
+    
+
+</ui:composition>
